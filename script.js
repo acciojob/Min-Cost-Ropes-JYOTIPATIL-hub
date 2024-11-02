@@ -1,29 +1,27 @@
 function mincost(arr) {
-    // Edge case: if there's only one rope, no cost is needed
-    if (arr.length <= 1) return 0;
-    
-    // Step 1: Sort the array to simulate a min-heap (smallest elements first)
-    arr.sort((a, b) => a - b);
-    
+    // Edge case: if there's only one rope, no cost is required
+    if (arr.length === 1) return 0;
+
+    // Initialize the min-heap
+    const minHeap = [...arr].sort((a, b) => a - b);
+
     let totalCost = 0;
-    
-    // Step 2: Combine ropes until only one rope remains
-    while (arr.length > 1) {
-        // Pop the two smallest ropes
-        let first = arr.shift();
-        let second = arr.shift();
-        
+
+    while (minHeap.length > 1) {
+        // Remove the two smallest elements
+        const first = minHeap.shift();
+        const second = minHeap.shift();
+
         // Calculate the cost to connect these two ropes
-        let cost = first + second;
+        const cost = first + second;
         totalCost += cost;
-        
-        // Insert the combined rope back into the sorted array
-        // Inserting it at the correct position to maintain sorted order
-        arr.push(cost);
-        arr.sort((a, b) => a - b);  // Sorting again to maintain the min-heap order
+
+        // Add the new rope back into the sorted list (min-heap)
+        let pos = minHeap.findIndex(x => x > cost);
+        if (pos === -1) minHeap.push(cost);
+        else minHeap.splice(pos, 0, cost);
     }
-    
-    // Step 3: Return the total cost
+
     return totalCost;
 }
 
